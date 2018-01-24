@@ -11,6 +11,7 @@ using Showrunner.Data.Models;
 using Showrunner.Data.Helpers;
 using Showrunner.Data.Utils;
 using Showrunner.UI.Dialogs;
+using System.IO;
 
 namespace Showrunner.UI.Controls
 {
@@ -116,6 +117,27 @@ namespace Showrunner.UI.Controls
             TopNetworks,
             ShowOverView,
             Recommendations
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new SaveFileDialog())
+            {
+                dlg.Filter = "Text file (.txt)|";
+                if (csvCheckbutton.Checked)
+                    dlg.Filter = "csv (.csv)|";
+
+                if (dlg.ShowDialog() != DialogResult.OK || string.IsNullOrWhiteSpace(dlg.FileName))
+                    return;
+
+                var fileName = dlg.FileName;
+                if (csvCheckbutton.Checked && !fileName.EndsWith(".csv"))
+                    fileName = fileName + ".csv";
+                else if (!fileName.EndsWith(".txt"))
+                    fileName = fileName + ".txt";
+
+                File.WriteAllText(fileName, reportEdit.Text);
+            }
         }
     }
 }

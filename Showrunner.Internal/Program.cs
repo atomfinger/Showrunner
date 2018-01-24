@@ -20,7 +20,7 @@ namespace Showrunner.Internal
             Data.Helpers.ImportFileHelper.Import(@"E:\PayEx\shows.csv");
 
             context = DbContextFactory.GetDbContext();
-            ApiHelper.UpdateShows(context, context.Shows.ToArray(), new TvmazeApi(), CancellationToken.None, new ProgressReport());
+            ShowHelper.UpdateShows(context, context.Shows.ToArray(), new TvmazeApi(), CancellationToken.None, new ProgressReport());
 
             Console.ReadLine();
 

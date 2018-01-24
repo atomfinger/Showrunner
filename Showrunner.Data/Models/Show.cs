@@ -21,6 +21,7 @@ namespace Showrunner.Data.Models
         public DateTime? Premiered { get; set; }
         public int? NetworkId { get; set; }
         public Network Network { get; set; }
+        public string Summary { get; set; }
 
         public virtual ICollection<Episode> Episodes { get; set; }
         public virtual ICollection<Genre> Genres { get; set; }
@@ -32,6 +33,7 @@ namespace Showrunner.Data.Models
             Premiered = toCopy.Premiered;
             Rating = toCopy.Rating;
             Title = toCopy.Title;
+            Summary = toCopy.Summary;
         }
     }
 }

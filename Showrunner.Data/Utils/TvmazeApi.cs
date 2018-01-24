@@ -30,7 +30,7 @@ namespace Showrunner.Data.Utils
 
         public async override Task<IEnumerable<Episode>> GetEpisodes(int showId)
         {
-            var result = await DoRequestAsync(new Uri(baseUri, $@"/shows/{showId}/episodes?specials=1"));
+            var result = await Task.Run(() => DoRequestAsync(new Uri(baseUri, $@"/shows/{showId}/episodes?specials=1")));
             if (string.IsNullOrWhiteSpace(result))
                 return null;
 
@@ -45,6 +45,24 @@ namespace Showrunner.Data.Utils
             return converted;
         }
 
+        public async override Task<IEnumerable<Episode>> GetScheduledEpisodes(DateTime date, string countryCode)
+        {
+            var result = await Task.Run(() => DoRequestAsync(new Uri(baseUri, $@"schedule?country={countryCode}&date={date.ToString("yyyy-MM-dd")}")));
+            dynamic episodes = JsonConvert.DeserializeObject(result);
+            if (episodes == null)
+                return null;
+
+            var converted = new List<Episode>();
+            foreach (dynamic episode in episodes)
+            {
+                Episode e = ConvertToEpisode(episode);
+                e.Show = ConvertToShow(episode.show);
+                converted.Add(e);
+            }
+
+            return converted;
+        }
+
         #region convertions
 
         private Episode ConvertToEpisode(dynamic episode)
@@ -54,10 +72,13 @@ namespace Showrunner.Data.Utils
                 ApiId = episode.id,
                 Season = episode.season,
                 Title = episode.name,
+                Number = episode.number,
             };
 
             if (episode.airdate > SqlDateTime.MinValue)
                 newEpisode.AirDate = episode.airdate;
+
+            newEpisode.Summary = episode.summary;
 
             return newEpisode;
         }
@@ -81,6 +102,11 @@ namespace Showrunner.Data.Utils
                 foreach (var genre in show.genres.ToObject<List<string>>())
                     newShow.Genres.Add(ConvertToGenre(genre));
             }
+
+            if (show.rating != null)
+                newShow.Rating = show.rating.average;
+
+            newShow.Summary = show.summary;
 
             return newShow;
         }
@@ -107,7 +133,7 @@ namespace Showrunner.Data.Utils
 
         private async Task<Show> DoShowQueryAsync(Uri uri)
         {
-            var result = await DoRequestAsync(uri);
+            var result = await Task.Run(() => DoRequestAsync(uri));
             if (string.IsNullOrWhiteSpace(result))
                 return null;
 
@@ -118,19 +144,25 @@ namespace Showrunner.Data.Utils
             return ConvertToShow(show);
         }
 
-        private async Task<string> DoRequestAsync(Uri requestUri)
+        private string DoRequestAsync(Uri requestUri)
         {
             int tries = 1;
             while (tries <= 10)
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUri);
+                request.Proxy = null;
+
                 try
                 {
-                    WebResponse response = await request.GetResponseAsync();
-                    using (Stream responseStream = response.GetResponseStream())
+                    using (WebResponse response = request.GetResponse())
                     {
-                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                        return reader.ReadToEnd();
+                        using (Stream responseStream = response.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
+                            {
+                                return reader.ReadToEnd();
+                            }
+                        }
                     }
                 }
                 catch (WebException ex)
@@ -154,7 +186,7 @@ namespace Showrunner.Data.Utils
 
                     if (response.Contains("429"))
                     {
-                        Thread.Sleep(10000 * tries);
+                        Thread.Sleep(10000);
                         tries++;
                         continue;
                     }

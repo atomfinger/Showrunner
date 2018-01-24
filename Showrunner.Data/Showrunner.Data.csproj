@@ -51,11 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseConnection\DbContextFactory.cs" />
-    <Compile Include="Helpers\ApiHelper.cs" />
+    <Compile Include="Enums\ReportType.cs" />
+    <Compile Include="Helpers\ReportHelpers.cs" />
+    <Compile Include="Helpers\ShowHelper.cs" />
     <Compile Include="Helpers\ImportFileHelper.cs" />
     <Compile Include="Interfaces\IDbConnectionProvider.cs" />
     <Compile Include="Interfaces\IFileImporter.cs" />
     <Compile Include="Classes\ShowApi.cs" />
+    <Compile Include="Interfaces\IReportCreator.cs" />
     <Compile Include="Models\Episode.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Network.cs" />

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Showrunner.Data.Helpers
 {
-    public static class ApiHelper
+    public static class ShowHelper
     {
         public async static void UpdateShows(ShowrunnerDbContext context, Show[] shows, ShowApi api, CancellationToken token, IProgress<int> progress = null)
         {
@@ -100,6 +100,22 @@ namespace Showrunner.Data.Helpers
 
             if (progress != null)
                 progress.Report(100);
+        }
+
+        public static IDictionary<DayOfWeek, IList<Episode>> GetNextWeekSchedule(string countryCode, ShowApi api)
+        {
+            var schedule = new Dictionary<DayOfWeek, IList<Episode>>();
+
+            int diff = (7 + (DateTime.Today.DayOfWeek - DayOfWeek.Monday)) % 7;
+            var date = DateTime.Today.AddDays(7).AddDays(-1 * diff).Date;
+
+            for (int i = 0; i < 7; i++)
+            {
+                schedule[date.DayOfWeek] = new List<Episode>(api.GetScheduledEpisodes(date, countryCode).GetAwaiter().GetResult());
+                date = date.AddDays(1);
+            }
+
+            return schedule;
         }
     }
 }

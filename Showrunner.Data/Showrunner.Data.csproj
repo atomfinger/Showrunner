@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CSV\shows.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

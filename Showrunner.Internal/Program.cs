@@ -13,17 +13,18 @@ namespace Showrunner.Internal
 {
     class Program
     {
+        private static ShowrunnerDbContext context;
         static void Main(string[] args)
         {
             Data.DatabaseConnection.DbContextFactory.SetConnectionProvider(new SqlConnectionProvider());
             Data.Helpers.ImportFileHelper.Import(@"E:\PayEx\shows.csv");
 
-            using (var context = DbContextFactory.GetDbContext())
-            {
-                ApiHelper.UpdateShows(context.Shows.ToArray(), new TvmazeApi(), CancellationToken.None, new ProgressReport());
-            }
+            context = DbContextFactory.GetDbContext();
+            ApiHelper.UpdateShows(context, context.Shows.ToArray(), new TvmazeApi(), CancellationToken.None, new ProgressReport());
 
             Console.ReadLine();
+
+            context.Dispose();
         }
 
         public class ProgressReport : IProgress<int>

@@ -19,6 +19,8 @@ namespace Showrunner.Data.DatabaseConnection
 
         public virtual DbSet<Show> Shows { get; set; }
         public virtual DbSet<Episode> Episodes { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<Network> Networks { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -26,11 +28,40 @@ namespace Showrunner.Data.DatabaseConnection
 
             Setup(modelBuilder.Entity<Episode>());
             Setup(modelBuilder.Entity<Show>());
+            Setup(modelBuilder.Entity<Network>());
+            Setup(modelBuilder.Entity<Genre>());
+        }
+
+        private void Setup(EntityTypeConfiguration<Network> entityConfig)
+        {
+            entityConfig.ToTable("Network").HasKey(x => x.Oid);
+        }
+
+        private void Setup(EntityTypeConfiguration<Genre> entityConfig)
+        {
+            entityConfig.ToTable("Genre").HasKey(x => x.Oid);
         }
 
         private void Setup(EntityTypeConfiguration<Show> entityConfig)
         {
             entityConfig.ToTable("Show").HasKey(x => x.Oid);
+
+            entityConfig
+                .HasMany<Genre>(s => s.Genres)
+                .WithMany(s => s.Shows)
+                .Map(s =>
+                {
+                    s.MapLeftKey("Show");
+                    s.MapRightKey("Genre");
+                    s.ToTable("ShowGenre");
+                });
+
+            entityConfig
+                .HasOptional(s => s.Network)
+                .WithMany(s => s.Shows)
+                .HasForeignKey(s => s.NetworkId);
+
+            entityConfig.Property(s => s.NetworkId).HasColumnName("Network");
         }
 
         private void Setup(EntityTypeConfiguration<Episode> entityConfig)
@@ -39,7 +70,7 @@ namespace Showrunner.Data.DatabaseConnection
 
             entityConfig
                 .HasRequired(s => s.Show)
-                .WithMany()
+                .WithMany(s => s.Episodes)
                 .HasForeignKey(s => s.ShowId);
 
             entityConfig.Property(s => s.ShowId).HasColumnName("Show");

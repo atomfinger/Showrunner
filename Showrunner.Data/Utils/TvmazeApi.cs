@@ -18,7 +18,6 @@ namespace Showrunner.Data.Utils
     {
         private Uri baseUri = new Uri(@"http://api.tvmaze.com/");
 
-
         public async override Task<Show> SearchAsync(string showName)
         {
             return await DoShowQueryAsync(new Uri(baseUri, $@"singlesearch/shows?q={showName}"));
@@ -45,7 +44,6 @@ namespace Showrunner.Data.Utils
 
             return converted;
         }
-
 
         #region convertions
 
@@ -75,7 +73,32 @@ namespace Showrunner.Data.Utils
             if (show.premiered > SqlDateTime.MinValue)
                 newShow.Premiered = show.premiered;
 
+            if (show.network != null)
+                newShow.Network = ConvertToNetwork(show.network);
+
+            if (show.genres != null && show.genres.Count > 0)
+            {
+                foreach (var genre in show.genres.ToObject<List<string>>())
+                    newShow.Genres.Add(ConvertToGenre(genre));
+            }
+
             return newShow;
+        }
+
+        private Network ConvertToNetwork(dynamic network)
+        {
+            var newNetwork = new Network()
+            {
+                ApiId = network.id,
+                Name = network.name
+            };
+
+            return newNetwork;
+        }
+
+        private Genre ConvertToGenre(string genre)
+        {
+            return new Genre() { Description = genre };
         }
 
         #endregion

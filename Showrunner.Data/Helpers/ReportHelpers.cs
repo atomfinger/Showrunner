@@ -102,5 +102,52 @@ namespace Showrunner.Data.Helpers
 
             return report.ToString();
         }
+
+        public static string TopNetworksReport(ReportType type)
+        {
+            StringBuilder report = new StringBuilder();
+            using (var context = DbContextFactory.GetDbContext())
+            {
+                var networkInfos = context.Networks.Select(n =>
+                new
+                {
+                    Network = n,
+                    AverageRating = n.Shows.Where(s => s.Rating.HasValue).Average(s => s.Rating),
+                    TopShow = n.Shows.Where(s => s.Rating.HasValue).OrderByDescending(s => s.Rating).FirstOrDefault(),
+                    ShowCount = n.Shows.Count(),
+                });
+
+                if (type == ReportType.CSV)
+                    report.AppendLine("AVERAGE_RATING;NETWORK;TOP_RATED_SHOW;TOP_RATING;SHOW_COUNT");
+
+                foreach (var info in networkInfos.OrderByDescending(s => s.AverageRating))
+                {
+                    if (info.TopShow == null || !info.AverageRating.HasValue)
+                        continue;
+
+                    switch(type)
+                    {
+                        case ReportType.CSV:
+                            report.AppendLine(TopNetworksReportCsv(info.Network, info.AverageRating, info.TopShow, info.ShowCount));
+                            break;
+                        case ReportType.Text:
+                            report.AppendLine(TopNetworksReportText(info.Network, info.AverageRating, info.TopShow, info.ShowCount));
+                            break;
+                    }
+                }
+
+                return report.ToString();
+            }
+        }
+
+        private static string TopNetworksReportCsv(Network network, decimal? rating, Show topShow, int showCount)
+        {
+            return $"{Math.Round(rating.Value, 1).ToString()};{network.Name};{topShow.Title};{Math.Round(topShow.Rating.Value, 1).ToString()};{showCount}";
+        }
+
+        private static string TopNetworksReportText(Network network, decimal? rating, Show topShow, int showCount)
+        {
+            return $"{network.Name} (Avg: {Math.Round(rating.Value, 1).ToString()}) - TOP: {topShow.Title} ({Math.Round(topShow.Rating.Value, 1).ToString()}) - TOTAL: {showCount}";
+        }
     }
 }

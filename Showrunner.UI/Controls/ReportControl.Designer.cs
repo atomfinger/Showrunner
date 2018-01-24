@@ -34,6 +34,7 @@
             this.reportEdit = new System.Windows.Forms.RichTextBox();
             this.csvCheckbutton = new System.Windows.Forms.CheckBox();
             this.topTenButton = new System.Windows.Forms.Button();
+            this.topNetworksButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -51,7 +52,7 @@
             this.nextWeekScheduleButton.Name = "nextWeekScheduleButton";
             this.nextWeekScheduleButton.Size = new System.Drawing.Size(134, 23);
             this.nextWeekScheduleButton.TabIndex = 6;
-            this.nextWeekScheduleButton.Text = "Next week schedule report";
+            this.nextWeekScheduleButton.Text = "Next Week Schedule";
             this.nextWeekScheduleButton.UseVisualStyleBackColor = true;
             this.nextWeekScheduleButton.Click += new System.EventHandler(this.nextWeekScheduleButton_Click);
             // 
@@ -94,10 +95,21 @@
             this.topTenButton.UseVisualStyleBackColor = true;
             this.topTenButton.Click += new System.EventHandler(this.topTenButton_Click);
             // 
+            // topNetworksButton
+            // 
+            this.topNetworksButton.Location = new System.Drawing.Point(8, 84);
+            this.topNetworksButton.Name = "topNetworksButton";
+            this.topNetworksButton.Size = new System.Drawing.Size(134, 23);
+            this.topNetworksButton.TabIndex = 10;
+            this.topNetworksButton.Text = "Top Networks";
+            this.topNetworksButton.UseVisualStyleBackColor = true;
+            this.topNetworksButton.Click += new System.EventHandler(this.topNetworksButton_Click);
+            // 
             // ReportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.topNetworksButton);
             this.Controls.Add(this.topTenButton);
             this.Controls.Add(this.csvCheckbutton);
             this.Controls.Add(this.label2);
@@ -119,5 +131,6 @@
         private System.Windows.Forms.RichTextBox reportEdit;
         private System.Windows.Forms.CheckBox csvCheckbutton;
         private System.Windows.Forms.Button topTenButton;
+        private System.Windows.Forms.Button topNetworksButton;
     }
 }

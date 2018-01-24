@@ -1,4 +1,5 @@
 ﻿using Showrunner.Data.Classes;
+using Showrunner.Data.DatabaseConnection;
 using Showrunner.Data.Enums;
 using Showrunner.Data.Models;
 using System;
@@ -62,6 +63,42 @@ namespace Showrunner.Data.Helpers
 
                 report.AppendLine();
             }
+
+            return report.ToString();
+        }
+
+        public static string TopTenShowsReport(ReportType type)
+        {
+            using (var context = DbContextFactory.GetDbContext())
+            {
+               var shows = context.Shows.OrderByDescending(s => s.Rating).Where(s => s.Rating.HasValue).Take(10);
+               switch (type)
+                {
+                    case ReportType.CSV: return TopTenShowsReportCsv(shows);
+                    case ReportType.Text: return TopTenShowsReportText(shows);
+                }
+
+                throw new NotSupportedException();
+            }
+        }
+
+        private static string TopTenShowsReportCsv(IEnumerable<Show> shows)
+        {
+            StringBuilder report = new StringBuilder();
+            report.AppendLine("SHOW_NAME;RATING");
+            foreach (var show in shows)
+                report.AppendLine($"{show.Title};{Math.Round(show.Rating.Value, 1).ToString()}");
+            return report.ToString();
+        }
+
+        private static string TopTenShowsReportText(IEnumerable<Show> shows)
+        {
+            StringBuilder report = new StringBuilder();
+            foreach (var show in shows)
+                report.AppendLine($"{Math.Round(show.Rating.Value, 1).ToString()} - {show.Title}");
+
+            if (shows.Count() == 0)
+                report.AppendLine("No shows has ratings");
 
             return report.ToString();
         }

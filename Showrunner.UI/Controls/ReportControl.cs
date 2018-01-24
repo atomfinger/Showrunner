@@ -22,12 +22,6 @@ namespace Showrunner.UI.Controls
             InitializeComponent();
         }
 
-        private void nextWeekScheduleButton_Click(object sender, EventArgs e)
-        {
-            currentReport = Report.Schedule;
-            RefreshData();
-        }
-
         public void RefreshData()
         {
             Data.Enums.ReportType type = Data.Enums.ReportType.Text;
@@ -39,6 +33,10 @@ namespace Showrunner.UI.Controls
                 case Report.Schedule:
                     Task.Run(() => ReportHelpers.GetNextWeekScheduleReport(type, new TvmazeApi())).ContinueWith((task) => UpdateReport(task.Result));
                     break;
+                case Report.TopTen:
+                    UpdateReport(ReportHelpers.TopTenShowsReport(type));
+                    break;
+
             }
         }
 
@@ -58,9 +56,23 @@ namespace Showrunner.UI.Controls
             RefreshData();
         }
 
+        private void topTenButton_Click(object sender, EventArgs e)
+        {
+            currentReport = Report.TopTen;
+            RefreshData();
+        }
+
+        private void nextWeekScheduleButton_Click(object sender, EventArgs e)
+        {
+            currentReport = Report.Schedule;
+            RefreshData();
+        }
+
         private enum Report
         {
             Schedule,
+            TopTen,
         }
+
     }
 }

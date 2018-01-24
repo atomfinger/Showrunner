@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.reportEdit = new System.Windows.Forms.RichTextBox();
             this.csvCheckbutton = new System.Windows.Forms.CheckBox();
+            this.topTenButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -83,10 +84,21 @@
             this.csvCheckbutton.UseVisualStyleBackColor = true;
             this.csvCheckbutton.CheckedChanged += new System.EventHandler(this.csvCheckbutton_CheckedChanged);
             // 
+            // topTenButton
+            // 
+            this.topTenButton.Location = new System.Drawing.Point(8, 55);
+            this.topTenButton.Name = "topTenButton";
+            this.topTenButton.Size = new System.Drawing.Size(134, 23);
+            this.topTenButton.TabIndex = 9;
+            this.topTenButton.Text = "Top 10";
+            this.topTenButton.UseVisualStyleBackColor = true;
+            this.topTenButton.Click += new System.EventHandler(this.topTenButton_Click);
+            // 
             // ReportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.topTenButton);
             this.Controls.Add(this.csvCheckbutton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nextWeekScheduleButton);
@@ -106,5 +118,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox reportEdit;
         private System.Windows.Forms.CheckBox csvCheckbutton;
+        private System.Windows.Forms.Button topTenButton;
     }
 }

@@ -149,5 +149,56 @@ namespace Showrunner.Data.Helpers
         {
             return $"{network.Name} (Avg: {Math.Round(rating.Value, 1).ToString()}) - TOP: {topShow.Title} ({Math.Round(topShow.Rating.Value, 1).ToString()}) - TOTAL: {showCount}";
         }
+
+        public static string ShowReport(ReportType type)
+        {
+            StringBuilder report = new StringBuilder();
+
+            using (var context = DbContextFactory.GetDbContext())
+            {
+                var showInfos = context.Shows.Select(s =>
+                new
+                {
+                    Show = s,
+                    EpisodeCount = s.Episodes.Count,
+                    ReleasedEpisodeCount = s.Episodes.Count(e => e.AirDate > DateTime.Today),
+                    Seasons = s.Episodes.Where(e => e.Season.HasValue).Max(n => n.Season),
+                    s.Network,
+                    s.Genres,
+                });
+
+                if (type == ReportType.CSV)
+                    report.AppendLine("SHOW_NAME;NETWORK;GENRES;EPISODE_COUNT;RELEASED_EPISODE_COUNT");
+
+                foreach (var info in showInfos)
+                {
+                    var genres = "Unkown";
+                    if (info.Genres.Count > 0)
+                        genres = string.Join(", ", info.Genres.Select(s => s.Description));
+
+                    switch (type)
+                    {
+                        case ReportType.CSV:
+                            report.AppendLine(ShowReportCsv(info.Show, info.EpisodeCount, info.ReleasedEpisodeCount, info.Seasons, genres));
+                            break;
+                        case ReportType.Text:
+                            report.AppendLine(ShowReportText(info.Show, info.EpisodeCount, info.ReleasedEpisodeCount, info.Seasons, genres));
+                            break;
+                    }
+                }
+
+                return report.ToString();
+            }
+        }
+
+        private static string ShowReportCsv(Show show, int episodeCount, int releasedEpisodeCount, int? seasons, string genres)
+        {
+            return $"{show.Title};{show.Network?.Name ?? "Unkown"};{genres};{seasons?.ToString() ?? "Unkown"};{episodeCount}{releasedEpisodeCount}";
+        }
+
+        private static string ShowReportText(Show show, int episodeCount, int releasedEpisodeCount, int? seasons, string genres)
+        {
+            return $"{show.Title} ({show.Network?.Name ?? "Unkown"}) Genres: {genres} Seasons: {seasons?.ToString() ?? "Unkown"} Episodes: {episodeCount} (Relased: {releasedEpisodeCount})";
+        }
     }
 }

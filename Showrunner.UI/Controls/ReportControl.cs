@@ -39,6 +39,9 @@ namespace Showrunner.UI.Controls
                 case Report.TopNetworks:
                     UpdateReport(ReportHelpers.TopNetworksReport(type));
                     break;
+                case Report.ShowOverView:
+                    UpdateReport(ReportHelpers.ShowReport(type));
+                    break;
             }
         }
 
@@ -76,13 +79,21 @@ namespace Showrunner.UI.Controls
             RefreshData();
         }
 
+        private void showOverViewButton_Click(object sender, EventArgs e)
+        {
+            currentReport = Report.ShowOverView;
+            RefreshData();
+        }
+
         private enum Report
         {
             Schedule,
             TopTen,
             TopNetworks,
+            ShowOverView,
+            TopEpisodes
         }
 
-
+        
     }
 }

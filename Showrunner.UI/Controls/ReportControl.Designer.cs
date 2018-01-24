@@ -35,6 +35,7 @@
             this.csvCheckbutton = new System.Windows.Forms.CheckBox();
             this.topTenButton = new System.Windows.Forms.Button();
             this.topNetworksButton = new System.Windows.Forms.Button();
+            this.showOverViewButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -105,10 +106,21 @@
             this.topNetworksButton.UseVisualStyleBackColor = true;
             this.topNetworksButton.Click += new System.EventHandler(this.topNetworksButton_Click);
             // 
+            // showOverViewButton
+            // 
+            this.showOverViewButton.Location = new System.Drawing.Point(8, 113);
+            this.showOverViewButton.Name = "showOverViewButton";
+            this.showOverViewButton.Size = new System.Drawing.Size(134, 23);
+            this.showOverViewButton.TabIndex = 11;
+            this.showOverViewButton.Text = "Show Overview";
+            this.showOverViewButton.UseVisualStyleBackColor = true;
+            this.showOverViewButton.Click += new System.EventHandler(this.showOverViewButton_Click);
+            // 
             // ReportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.showOverViewButton);
             this.Controls.Add(this.topNetworksButton);
             this.Controls.Add(this.topTenButton);
             this.Controls.Add(this.csvCheckbutton);
@@ -132,5 +144,6 @@
         private System.Windows.Forms.CheckBox csvCheckbutton;
         private System.Windows.Forms.Button topTenButton;
         private System.Windows.Forms.Button topNetworksButton;
+        private System.Windows.Forms.Button showOverViewButton;
     }
 }

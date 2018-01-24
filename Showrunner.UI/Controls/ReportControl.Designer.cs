@@ -36,6 +36,8 @@
             this.topTenButton = new System.Windows.Forms.Button();
             this.topNetworksButton = new System.Windows.Forms.Button();
             this.showOverViewButton = new System.Windows.Forms.Button();
+            this.recommendationButton = new System.Windows.Forms.Button();
+            this.exportButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -60,7 +62,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(308, 6);
+            this.label1.Location = new System.Drawing.Point(145, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 5;
@@ -68,17 +70,22 @@
             // 
             // reportEdit
             // 
-            this.reportEdit.Location = new System.Drawing.Point(311, 28);
+            this.reportEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.reportEdit.Location = new System.Drawing.Point(148, 26);
             this.reportEdit.Name = "reportEdit";
             this.reportEdit.ReadOnly = true;
-            this.reportEdit.Size = new System.Drawing.Size(777, 646);
+            this.reportEdit.Size = new System.Drawing.Size(954, 646);
             this.reportEdit.TabIndex = 4;
             this.reportEdit.Text = "";
             // 
             // csvCheckbutton
             // 
             this.csvCheckbutton.AutoSize = true;
-            this.csvCheckbutton.Location = new System.Drawing.Point(356, 6);
+            this.csvCheckbutton.Checked = true;
+            this.csvCheckbutton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.csvCheckbutton.Location = new System.Drawing.Point(193, 6);
             this.csvCheckbutton.Name = "csvCheckbutton";
             this.csvCheckbutton.Size = new System.Drawing.Size(84, 17);
             this.csvCheckbutton.TabIndex = 8;
@@ -116,10 +123,31 @@
             this.showOverViewButton.UseVisualStyleBackColor = true;
             this.showOverViewButton.Click += new System.EventHandler(this.showOverViewButton_Click);
             // 
+            // recommendationButton
+            // 
+            this.recommendationButton.Location = new System.Drawing.Point(8, 142);
+            this.recommendationButton.Name = "recommendationButton";
+            this.recommendationButton.Size = new System.Drawing.Size(134, 23);
+            this.recommendationButton.TabIndex = 12;
+            this.recommendationButton.Text = "Show Recommendations";
+            this.recommendationButton.UseVisualStyleBackColor = true;
+            this.recommendationButton.Click += new System.EventHandler(this.recommendationButton_Click);
+            // 
+            // exportButton
+            // 
+            this.exportButton.Location = new System.Drawing.Point(8, 649);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(134, 23);
+            this.exportButton.TabIndex = 13;
+            this.exportButton.Text = "Export";
+            this.exportButton.UseVisualStyleBackColor = true;
+            // 
             // ReportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.exportButton);
+            this.Controls.Add(this.recommendationButton);
             this.Controls.Add(this.showOverViewButton);
             this.Controls.Add(this.topNetworksButton);
             this.Controls.Add(this.topTenButton);
@@ -145,5 +173,7 @@
         private System.Windows.Forms.Button topTenButton;
         private System.Windows.Forms.Button topNetworksButton;
         private System.Windows.Forms.Button showOverViewButton;
+        private System.Windows.Forms.Button recommendationButton;
+        private System.Windows.Forms.Button exportButton;
     }
 }

@@ -15,7 +15,7 @@ namespace Showrunner.Data.Helpers
         public static string GetNextWeekScheduleReport(ReportType type, ShowApi api, string countryCode = "US")
         {
             var result = ShowHelper.GetNextWeekSchedule(countryCode, api);
-            switch(type)
+            switch (type)
             {
                 case ReportType.CSV: return GetNextWeekScheduleReportCsv(result);
                 case ReportType.Text: return GetNextWeekScheduleReportTxt(result);
@@ -41,7 +41,7 @@ namespace Showrunner.Data.Helpers
                         case DayOfWeek.Wednesday: report.AppendLine($"{episode.Show.Title};;;{info};;;;"); break;
                         case DayOfWeek.Thursday: report.AppendLine($"{episode.Show.Title};;;;{info};;;"); break;
                         case DayOfWeek.Friday: report.AppendLine($"{episode.Show.Title};;;;;{info};;"); break;
-                        case DayOfWeek.Saturday:report.AppendLine($"{episode.Show.Title};;;;;;{info};"); break;
+                        case DayOfWeek.Saturday: report.AppendLine($"{episode.Show.Title};;;;;;{info};"); break;
                         case DayOfWeek.Sunday: report.AppendLine($"{episode.Show.Title};;;;;;;{info}"); break;
                     }
                 }
@@ -71,8 +71,8 @@ namespace Showrunner.Data.Helpers
         {
             using (var context = DbContextFactory.GetDbContext())
             {
-               var shows = context.Shows.OrderByDescending(s => s.Rating).Where(s => s.Rating.HasValue).Take(10);
-               switch (type)
+                var shows = context.Shows.OrderByDescending(s => s.Rating).Where(s => s.Rating.HasValue).Take(10);
+                switch (type)
                 {
                     case ReportType.CSV: return TopTenShowsReportCsv(shows);
                     case ReportType.Text: return TopTenShowsReportText(shows);
@@ -125,7 +125,7 @@ namespace Showrunner.Data.Helpers
                     if (info.TopShow == null || !info.AverageRating.HasValue)
                         continue;
 
-                    switch(type)
+                    switch (type)
                     {
                         case ReportType.CSV:
                             report.AppendLine(TopNetworksReportCsv(info.Network, info.AverageRating, info.TopShow, info.ShowCount));
@@ -157,24 +157,22 @@ namespace Showrunner.Data.Helpers
             using (var context = DbContextFactory.GetDbContext())
             {
                 var showInfos = context.Shows.Select(s =>
-                new
-                {
-                    Show = s,
-                    EpisodeCount = s.Episodes.Count,
-                    ReleasedEpisodeCount = s.Episodes.Count(e => e.AirDate > DateTime.Today),
-                    Seasons = s.Episodes.Where(e => e.Season.HasValue).Max(n => n.Season),
-                    s.Network,
-                    s.Genres,
-                });
+                    new
+                    {
+                        Show = s,
+                        EpisodeCount = s.Episodes.Count,
+                        ReleasedEpisodeCount = s.Episodes.Count(e => e.AirDate > DateTime.Today),
+                        Seasons = s.Episodes.Where(e => e.Season.HasValue).Max(n => n.Season),
+                        s.Network,
+                        s.Genres,
+                    });
 
                 if (type == ReportType.CSV)
                     report.AppendLine("SHOW_NAME;NETWORK;GENRES;EPISODE_COUNT;RELEASED_EPISODE_COUNT");
 
                 foreach (var info in showInfos)
                 {
-                    var genres = "Unkown";
-                    if (info.Genres.Count > 0)
-                        genres = string.Join(", ", info.Genres.Select(s => s.Description));
+                    var genres = GetGenreText(info.Genres);
 
                     switch (type)
                     {
@@ -199,6 +197,73 @@ namespace Showrunner.Data.Helpers
         private static string ShowReportText(Show show, int episodeCount, int releasedEpisodeCount, int? seasons, string genres)
         {
             return $"{show.Title} ({show.Network?.Name ?? "Unkown"}) Genres: {genres} Seasons: {seasons?.ToString() ?? "Unkown"} Episodes: {episodeCount} (Relased: {releasedEpisodeCount})";
+        }
+
+        public static string RecommendedShowsReport(Genre[] genres, ReportType type)
+        {
+            StringBuilder report = new StringBuilder();
+            var filterGenres = genres.Select(s => s.Description).ToList();
+            using (var context = DbContextFactory.GetDbContext())
+            {
+                var shows = context.Shows.OrderByDescending(s => s.Rating)
+                    .Select(s =>
+                    new
+                    {
+                        s.Title,
+                        s.Rating,
+                        s.Genres,
+                        s.Summary,
+                        s.ImbdId,
+                    });
+
+                if (type == ReportType.CSV)
+                    report.AppendLine("SHOW_NAME;RATING;GENRES;SUMMARY;IMDB_LINK");
+
+                int showsRecommended = 0;
+                int totalShowsToRecommend = 15;
+                foreach (var show in shows)
+                {
+                    var hasGenres = true;
+                    foreach (var filterGenre in filterGenres)
+                    {
+                        if (show.Genres.Any(s => s.Description == filterGenre))
+                            continue;
+
+                        hasGenres = false;
+                        break;
+                    }
+
+                    if (!hasGenres)
+                        continue;
+
+                    var genreText = GetGenreText(show.Genres);
+
+                    var imbdUrl = $@"http://www.imdb.com/title/{show.ImbdId}";
+                    switch (type)
+                    {
+                        case ReportType.CSV:
+                            report.AppendLine($"{show.Title};{Math.Round(show.Rating.Value, 1).ToString()};{genreText};{show.Summary};{imbdUrl}");
+                            break;
+                        case ReportType.Text:
+                            report.AppendLine($"{show.Title} ({Math.Round(show.Rating.Value, 1).ToString()}) - {genreText} - {imbdUrl}{Environment.NewLine}{show.Summary}");
+                            break;
+                    }
+
+                    showsRecommended++;
+                    if (showsRecommended > totalShowsToRecommend)
+                        break;
+                }
+            }
+
+            return report.ToString();
+        }
+
+        private static string GetGenreText(IEnumerable<Genre> genres)
+        {
+            var genreText = "Unkown";
+            if (genres != null && genres.Count() > 0)
+                genreText = string.Join(", ", genres.Select(s => s.Description));
+            return genreText;
         }
     }
 }

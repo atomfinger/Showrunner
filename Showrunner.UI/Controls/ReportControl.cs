@@ -10,12 +10,14 @@ using System.Windows.Forms;
 using Showrunner.Data.Models;
 using Showrunner.Data.Helpers;
 using Showrunner.Data.Utils;
+using Showrunner.UI.Dialogs;
 
 namespace Showrunner.UI.Controls
 {
     public partial class ReportControl : UserControl
     {
         Report currentReport = Report.Schedule;
+        Genre[] selectedGenres;
 
         public ReportControl()
         {
@@ -42,6 +44,11 @@ namespace Showrunner.UI.Controls
                 case Report.ShowOverView:
                     UpdateReport(ReportHelpers.ShowReport(type));
                     break;
+                case Report.Recommendations:
+                    UpdateReport(ReportHelpers.RecommendedShowsReport(selectedGenres.ToArray(), type));
+                    break;
+                default:
+                    throw new NotSupportedException();
             }
         }
 
@@ -85,15 +92,30 @@ namespace Showrunner.UI.Controls
             RefreshData();
         }
 
+        private void recommendationButton_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new SelectGenreDialog())
+            {
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+
+                selectedGenres = dlg.SelectedGenres.ToArray();
+
+                if (selectedGenres.Length <= 0)
+                    return;
+            }
+
+            currentReport = Report.Recommendations;
+            RefreshData();
+        }
+
         private enum Report
         {
             Schedule,
             TopTen,
             TopNetworks,
             ShowOverView,
-            TopEpisodes
+            Recommendations
         }
-
-        
     }
 }

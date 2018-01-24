@@ -36,6 +36,7 @@ Rating		DECIMAL(10,2),
 Premiered	DATETIME,
 Summary		NVARCHAR(MAX),
 Network		INT,
+ImbdId		NVARCHAR(10),
 CONSTRAINT PK_Show PRIMARY KEY (Oid),
 CONSTRAINT FK_Show_Network FOREIGN KEY (Network) REFERENCES Network(Oid),
 )

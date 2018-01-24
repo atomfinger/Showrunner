@@ -91,6 +91,10 @@ namespace Showrunner.Data.Utils
                 ApiId = show.id,
             };
 
+            var externals = show.externals.ToObject <Dictionary<string, string>>();
+            if (externals.ContainsKey("imdb"))
+                newShow.ImbdId = externals["imdb"];
+
             if (show.premiered > SqlDateTime.MinValue)
                 newShow.Premiered = show.premiered;
 

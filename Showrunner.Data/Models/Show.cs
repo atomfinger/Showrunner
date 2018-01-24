@@ -22,6 +22,7 @@ namespace Showrunner.Data.Models
         public int? NetworkId { get; set; }
         public Network Network { get; set; }
         public string Summary { get; set; }
+        public string ImbdId { get; set; }
 
         public virtual ICollection<Episode> Episodes { get; set; }
         public virtual ICollection<Genre> Genres { get; set; }

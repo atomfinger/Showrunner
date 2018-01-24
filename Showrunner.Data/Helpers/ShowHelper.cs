@@ -24,7 +24,7 @@ namespace Showrunner.Data.Helpers
             }
         }
 
-        public async static Task<bool> InternalUpdateShows(ShowrunnerDbContext context, Show[] shows, ShowApi api, CancellationToken token, IProgress<int> progress = null)
+        private async static Task<bool> InternalUpdateShows(ShowrunnerDbContext context, Show[] shows, ShowApi api, CancellationToken token, IProgress<int> progress = null)
         {
             if (shows == null || shows.Count() <= 0 || api == null)
                 return false;
@@ -46,7 +46,7 @@ namespace Showrunner.Data.Helpers
                 if (show.ApiId.HasValue)
                     apiResult = await api.FindShow(show.ApiId.Value);
                 else
-                    apiResult = await api.SearchAsync(show.Title);
+                    apiResult = await api.SingleShowSearch(show.Title);
 
                 if (apiResult != null)
                 {

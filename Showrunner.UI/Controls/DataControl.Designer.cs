@@ -32,22 +32,25 @@
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.importDataButton = new System.Windows.Forms.Button();
             this.syncDbButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.newShowButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title});
             this.dataGridView.Location = new System.Drawing.Point(172, 3);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
+            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(782, 589);
             this.dataGridView.TabIndex = 3;
+            this.dataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView_KeyDown);
             // 
             // Title
             // 
@@ -76,20 +79,21 @@
             this.syncDbButton.UseVisualStyleBackColor = true;
             this.syncDbButton.Click += new System.EventHandler(this.syncDbButton_Click);
             // 
-            // button2
+            // newShowButton
             // 
-            this.button2.Location = new System.Drawing.Point(3, 91);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(163, 38);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Add new show";
-            this.button2.UseVisualStyleBackColor = true;
+            this.newShowButton.Location = new System.Drawing.Point(3, 91);
+            this.newShowButton.Name = "newShowButton";
+            this.newShowButton.Size = new System.Drawing.Size(163, 38);
+            this.newShowButton.TabIndex = 5;
+            this.newShowButton.Text = "Add new show";
+            this.newShowButton.UseVisualStyleBackColor = true;
+            this.newShowButton.Click += new System.EventHandler(this.newShowButton_Click);
             // 
             // DataControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.newShowButton);
             this.Controls.Add(this.syncDbButton);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.importDataButton);
@@ -106,6 +110,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.Button importDataButton;
         private System.Windows.Forms.Button syncDbButton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button newShowButton;
     }
 }

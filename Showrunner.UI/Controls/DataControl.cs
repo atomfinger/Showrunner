@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Showrunner.Data.DatabaseConnection;
 using Showrunner.Data.Helpers;
 using Showrunner.UI.Dialogs;
+using Showrunner.Data.Models;
 
 namespace Showrunner.UI.Controls
 {
@@ -65,7 +66,10 @@ namespace Showrunner.UI.Controls
 
         private void RefreshData()
         {
-            dataGridView.DataSource = context.Shows.ToArray();
+            if (context != null)
+                context.Dispose();
+            context = DbContextFactory.GetDbContext();
+            dataGridView.DataSource = context.Shows.OrderBy(s => s.Title).ToArray();
         }
 
         private void syncDbButton_Click(object sender, EventArgs e)
@@ -77,6 +81,39 @@ namespace Showrunner.UI.Controls
             }
 
             RefreshData();
+        }
+
+        private void newShowButton_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new ShowSearchDialog())
+                dlg.ShowDialog();
+            RefreshData();
+        }
+
+        private void dataGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Delete)
+            {
+                DeleteSelectedShow();
+                e.Handled = true;
+            }
+        }
+
+        private void DeleteSelectedShow()
+        {
+            var rows = this.dataGridView.SelectedRows;
+            if (rows == null || rows.Count == 0)
+                return;
+
+            var show = rows[0].DataBoundItem as Show;
+            if (show == null)
+                return;
+
+            show.Genres.Clear();
+            show.Episodes.Clear();
+            context.Shows.Remove(show);
+            context.SaveChanges();
+            this.RefreshData();
         }
     }
 }

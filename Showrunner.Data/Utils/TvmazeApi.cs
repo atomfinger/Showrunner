@@ -18,14 +18,19 @@ namespace Showrunner.Data.Utils
     {
         private Uri baseUri = new Uri(@"http://api.tvmaze.com/");
 
-        public async override Task<Show> SearchAsync(string showName)
+        public async override Task<IEnumerable<Show>> SearchShow(string search)
         {
-            return await DoShowQueryAsync(new Uri(baseUri, $@"singlesearch/shows?q={showName}"));
+            return await DoShowQuery(new Uri(baseUri, $@"search/shows?q={search}"));
+        }
+
+        public async override Task<Show> SingleShowSearch(string showName)
+        {
+            return await DoSingleShowQuery(new Uri(baseUri, $@"singlesearch/shows?q={showName}"));
         }
 
         public async override Task<Show> FindShow(int id)
         {
-            return await DoShowQueryAsync(new Uri(baseUri, $@"lookup/shows?tvrage={id}"));
+            return await DoSingleShowQuery(new Uri(baseUri, $@"lookup/shows?tvrage={id}"));
         }
 
         public async override Task<IEnumerable<Episode>> GetEpisodes(int showId)
@@ -135,7 +140,22 @@ namespace Showrunner.Data.Utils
 
         #region Requests
 
-        private async Task<Show> DoShowQueryAsync(Uri uri)
+        private async Task<IEnumerable<Show>> DoShowQuery(Uri uri)
+        {
+            var shows = new List<Show>();
+            var result = await Task.Run(() => DoRequestAsync(uri));
+            if (result == null)
+                return shows;
+
+            dynamic dynamicShows = JsonConvert.DeserializeObject(result);
+
+            foreach (var item in dynamicShows.ToObject<List<dynamic>>())
+                shows.Add(ConvertToShow(item.show));
+
+            return shows;
+        }
+
+        private async Task<Show> DoSingleShowQuery(Uri uri)
         {
             var result = await Task.Run(() => DoRequestAsync(uri));
             if (string.IsNullOrWhiteSpace(result))
@@ -204,6 +224,8 @@ namespace Showrunner.Data.Utils
 
             throw new TimeoutException("Tried 10 times");
         }
+
+
 
         #endregion
 

@@ -14,8 +14,20 @@ namespace Showrunner.Data.Helpers
     {
         public async static void UpdateShows(ShowrunnerDbContext context, Show[] shows, ShowApi api, CancellationToken token, IProgress<int> progress = null)
         {
+            try
+            {
+                await InternalUpdateShows(context, shows, api, token, progress);
+            }
+            catch
+            {
+
+            }
+        }
+
+        public async static Task<bool> InternalUpdateShows(ShowrunnerDbContext context, Show[] shows, ShowApi api, CancellationToken token, IProgress<int> progress = null)
+        {
             if (shows == null || shows.Count() <= 0 || api == null)
-                return;
+                return false;
 
             var total = shows.Count();
             int current = 0;
@@ -26,7 +38,7 @@ namespace Showrunner.Data.Helpers
             foreach (var show in shows)
             {
                 if (token.IsCancellationRequested)
-                    return;
+                    return false;
 
                 context.Shows.Attach(show);
                 Show apiResult = null;
@@ -90,16 +102,18 @@ namespace Showrunner.Data.Helpers
 
                 current++;
                 if (progress != null)
-                    progress.Report(current * 100 / total);
+                    progress.Report(current * 95 / total);
             }
 
             if (token.IsCancellationRequested)
-                return;
+                return false;
 
             await context.SaveChangesAsync();
 
             if (progress != null)
                 progress.Report(100);
+
+            return true;
         }
 
         public static IDictionary<DayOfWeek, IList<Episode>> GetNextWeekSchedule(string countryCode, ShowApi api)

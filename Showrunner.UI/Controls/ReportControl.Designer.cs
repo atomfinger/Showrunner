@@ -76,7 +76,7 @@
             this.reportEdit.Location = new System.Drawing.Point(148, 26);
             this.reportEdit.Name = "reportEdit";
             this.reportEdit.ReadOnly = true;
-            this.reportEdit.Size = new System.Drawing.Size(954, 646);
+            this.reportEdit.Size = new System.Drawing.Size(832, 514);
             this.reportEdit.TabIndex = 4;
             this.reportEdit.Text = "";
             // 
@@ -135,7 +135,8 @@
             // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(8, 649);
+            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.exportButton.Location = new System.Drawing.Point(8, 517);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(134, 23);
             this.exportButton.TabIndex = 13;
@@ -157,7 +158,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.reportEdit);
             this.Name = "ReportControl";
-            this.Size = new System.Drawing.Size(1105, 686);
+            this.Size = new System.Drawing.Size(983, 554);
             this.ResumeLayout(false);
             this.PerformLayout();
 

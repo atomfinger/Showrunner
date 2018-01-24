@@ -1,0 +1,7 @@
+
+*.transform
+*.nupkg
+*.dll
+packages/
+bin/
+obj/

@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showrunner.Data", "Showrunner.Data\Showrunner.Data.csproj", "{4EA03496-2722-4C2D-B2A6-04F2FC5E0E5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showrunner.Internal", "Showrunner.Internal\Showrunner.Internal.csproj", "{CEADF939-4427-4945-A434-C2579CAC13DA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showrunner.UI", "Showrunner.UI\Showrunner.UI.csproj", "{E0A5102A-0D7D-420D-8F45-3CBA59FFB229}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{4EA03496-2722-4C2D-B2A6-04F2FC5E0E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EA03496-2722-4C2D-B2A6-04F2FC5E0E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EA03496-2722-4C2D-B2A6-04F2FC5E0E5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEADF939-4427-4945-A434-C2579CAC13DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEADF939-4427-4945-A434-C2579CAC13DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEADF939-4427-4945-A434-C2579CAC13DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEADF939-4427-4945-A434-C2579CAC13DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0A5102A-0D7D-420D-8F45-3CBA59FFB229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E0A5102A-0D7D-420D-8F45-3CBA59FFB229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0A5102A-0D7D-420D-8F45-3CBA59FFB229}.Release|Any CPU.ActiveCfg = Release|Any CPU

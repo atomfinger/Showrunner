@@ -1,0 +1,35 @@
+USE master
+GO
+
+DROP DATABASE ShowRunner
+GO
+
+CREATE DATABASE Showrunner
+GO
+
+USE Showrunner
+GO
+
+CREATE TABLE Show
+(
+Oid			INT IDENTITY(1,1) NOT NULL,
+ApiId		INT,
+Title		NVARCHAR(MAX),
+Rating		DECIMAL,
+Premiered	DATETIME,
+CONSTRAINT PK_Show PRIMARY KEY (Oid)
+)
+GO
+
+CREATE TABLE Episode
+(
+Oid			INT IDENTITY(1,1) NOT NULL,
+Show		INT NOT NULL,
+ApiId		INT,
+Title		NVARCHAR(MAX),
+Season		INT,
+AirDate		DATETIME,
+CONSTRAINT PK_Episode PRIMARY KEY (Oid),
+CONSTRAINT FK_Episode_Show FOREIGN KEY (Show) REFERENCES Show(Oid)
+)
+GO

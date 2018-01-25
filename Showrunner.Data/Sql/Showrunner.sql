@@ -1,7 +1,8 @@
 USE master
 GO
 
-DROP DATABASE ShowRunner
+IF EXISTS (SELECT name FROM master.sys.databases WHERE name = N'ShowRunner')
+	DROP DATABASE ShowRunner
 GO
 
 CREATE DATABASE Showrunner

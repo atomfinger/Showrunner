@@ -42,7 +42,7 @@ namespace Showrunner.UI.Dialogs
             var progressReport = new ProgressReport();
             progressReport.ProgressReported += ProgressReport_ProgressReported;
 
-            CancellationTokenSource source = new CancellationTokenSource();
+            source = new CancellationTokenSource();
 
             Task.Run(() => ShowHelper.UpdateShows(context, context.Shows.ToArray(), new TvmazeApi(), source.Token, progressReport));
         }

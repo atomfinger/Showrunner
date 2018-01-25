@@ -86,8 +86,10 @@ namespace Showrunner.Data.Helpers
         {
             StringBuilder report = new StringBuilder();
             report.AppendLine("SHOW_NAME;RATING");
+
             foreach (var show in shows)
                 report.AppendLine($"{show.Title};{Math.Round(show.Rating.Value, 1).ToString()}");
+
             return report.ToString();
         }
 
@@ -109,13 +111,13 @@ namespace Showrunner.Data.Helpers
             using (var context = DbContextFactory.GetDbContext())
             {
                 var networkInfos = context.Networks.Select(n =>
-                new
-                {
-                    Network = n,
-                    AverageRating = n.Shows.Where(s => s.Rating.HasValue).Average(s => s.Rating),
-                    TopShow = n.Shows.Where(s => s.Rating.HasValue).OrderByDescending(s => s.Rating).FirstOrDefault(),
-                    ShowCount = n.Shows.Count(),
-                });
+                    new
+                    {
+                        Network = n,
+                        AverageRating = n.Shows.Where(s => s.Rating.HasValue).Average(s => s.Rating),
+                        TopShow = n.Shows.Where(s => s.Rating.HasValue).OrderByDescending(s => s.Rating).FirstOrDefault(),
+                        ShowCount = n.Shows.Count(),
+                    });
 
                 if (type == ReportType.CSV)
                     report.AppendLine("AVERAGE_RATING;NETWORK;TOP_RATED_SHOW;TOP_RATING;SHOW_COUNT");

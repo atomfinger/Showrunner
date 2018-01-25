@@ -22,7 +22,6 @@ namespace Showrunner.Data.DatabaseConnection
         {
             if (_provider == null)
                 throw new NullReferenceException("Connection provider not set");
-            //var connetionString = $@"Data Source={server}; Initial Catalog={database};User ID={userName};Password={password}";
             return new ShowrunnerDbContext(_provider.GetDbConnection());
         }
     }

@@ -225,8 +225,6 @@ namespace Showrunner.Data.Utils
             throw new TimeoutException("Tried 10 times");
         }
 
-
-
         #endregion
 
     }

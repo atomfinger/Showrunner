@@ -66,7 +66,7 @@ namespace Showrunner.UI.Dialogs
             {
                 if (!context.Shows.Any(s => s.ApiId == show.ApiId))
                 {
-                    context.Entry(show);
+                    context.Entry(show).State = System.Data.Entity.EntityState.Added;
                     context.SaveChanges();
                 }
                 else

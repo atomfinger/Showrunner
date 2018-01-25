@@ -99,13 +99,18 @@ namespace Showrunner.UI.Controls
             }
         }
 
-        private void DeleteSelectedShow()
+        private Show GetSelectedShow()
         {
             var rows = this.dataGridView.SelectedRows;
             if (rows == null || rows.Count == 0)
-                return;
+                return null;
 
-            var show = rows[0].DataBoundItem as Show;
+            return rows[0].DataBoundItem as Show;
+        }
+
+        private void DeleteSelectedShow()
+        {
+            var show = GetSelectedShow();
             if (show == null)
                 return;
 
@@ -114,6 +119,16 @@ namespace Showrunner.UI.Controls
             context.Shows.Remove(show);
             context.SaveChanges();
             this.RefreshData();
+        }
+
+        private void dataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            var show = GetSelectedShow();
+            if (show == null)
+                return;
+
+            using (var dlg = new ShowInfoDialog(show))
+                dlg.ShowDialog();
         }
     }
 }

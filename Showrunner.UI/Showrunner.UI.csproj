@@ -85,6 +85,12 @@
     <Compile Include="Dialogs\SelectGenreDialog.Designer.cs">
       <DependentUpon>SelectGenreDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ShowInfoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ShowInfoDialog.Designer.cs">
+      <DependentUpon>ShowInfoDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ShowSearchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SelectGenreDialog.resx">
       <DependentUpon>SelectGenreDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ShowInfoDialog.resx">
+      <DependentUpon>ShowInfoDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ShowSearchDialog.resx">
       <DependentUpon>ShowSearchDialog.cs</DependentUpon>
